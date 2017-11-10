@@ -10,6 +10,7 @@ body {
 header {
   font-family: "Open Sans";
   font-size: 3.75em;
+  font-weight: 700;
   height: 120px;
   line-height: 120px;
   text-align: center; }
