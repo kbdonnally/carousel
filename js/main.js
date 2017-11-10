@@ -1,9 +1,26 @@
 (function() {
 	var slide,
+		slideList,
 		slideTrack,
 		gallery,
 		btnLeft,
 		btnRight;
+
+	slideList = document.getElementsByClassName('slide');
+	slideTrack = document.querySelector('.slide-container');
+	console.log(slideTrack.offsetWidth);
+	slide = {
+		height: slideList[0].offsetHeight,
+		divWidth:  slideList[0].offsetWidth,
+		margin: parseInt(window.getComputedStyle(slideList[0], null).marginLeft),
+		get width() {
+			return this.divWidth + (2 * this.margin);
+		}
+	};
+	slideTrack.style.width = slide.width * slideList.length + 'px';
+	console.log(slideTrack.style.width);
+
+
 })();
 
 
