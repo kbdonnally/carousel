@@ -63,11 +63,24 @@
 		});
 	});
 
-	// enable buttons
+	// set max translation
+	var maxTranslateX = -100 + (((gallery.elem.offsetWidth - (2 * gallery.padding)) / slideTrack.offsetWidth) * 100);
+	console.log(maxTranslateX);
+
+	// hide nav if active slide on load is 1st/last in collection
+	if (slideTrack.getAttribute("data-translateX") >= 0) {
+		btnLeft.classList.add("hide-btn");
+	}
+	if (slideTrack.getAttribute("data-translateX") <= maxTranslateX) {
+		btnRight.classList.add("hide-btn");
+	}
+
+	// enable button nav
 	btnRight.addEventListener('click', carouselBtn, false);
 	btnLeft.addEventListener('click', carouselBtn, false);
 
 	function carouselBtn(e) {
+		var maxTranslateX = -100 + (((gallery.elem.offsetWidth - (2 * gallery.padding)) / slideTrack.offsetWidth) * 100);
 		lastDelta = slideTrack.getAttribute("data-translateX");
 		numSlidesVisible = Math.floor(gallery.visibleWidth / slide.width);
 		percentage = 100 * numSlidesVisible / slideList.length;
@@ -76,14 +89,37 @@
 		}
 		moveBy = percentage + parseFloat(lastDelta);
 		alignTest = lastDelta / slide.percentOfTotal;
-		console.log(alignTest.toFixed(1));
-		if ((alignTest.toFixed(1) % 1) === 0) {
+
+		console.log(maxTranslateX - lastDelta);
+		console.log(maxTranslateX - moveBy);
+		console.log(moveBy.toFixed(1));
+		if (Math.abs((maxTranslateX - lastDelta)) < slide.percentOfTotal && (maxTranslateX - lastDelta) < 0) {
+			slideTrack.style.transform = `translateX(${maxTranslateX}%)`;
+			slideTrack.setAttribute('data-translateX', maxTranslateX);
+		} else if (moveBy.toFixed(1) == 0) {
+			slideTrack.style.transform = `translateX(0)`;
+			slideTrack.setAttribute('data-translateX', 0);
+		} else if ((alignTest.toFixed(1) % 1) === 0) {
 			slideTrack.style.transform = `translateX(${moveBy}%)`;
 			slideTrack.setAttribute('data-translateX', moveBy);	
 		} else {
 			moveBy = moveBy - ((alignTest % 1) * slide.percentOfTotal);
 			slideTrack.style.transform = `translateX(${moveBy}%)`;
 			slideTrack.setAttribute('data-translateX', moveBy);
-		}		
+		}
+
+		if (slideTrack.getAttribute("data-translateX") < 0) {
+			btnLeft.classList.remove("hide-btn");
+		} else if (slideTrack.getAttribute("data-translateX") >= 0) {
+			btnLeft.classList.add("hide-btn");
+		}
+
+		if (slideTrack.getAttribute("data-translateX") <= maxTranslateX) {
+			btnRight.classList.add("hide-btn");
+		} else if (slideTrack.getAttribute("data-translateX") > maxTranslateX) {
+			btnRight.classList.remove("hide-btn");
+		}
+
 	}
+
 })();
