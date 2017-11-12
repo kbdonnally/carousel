@@ -38,6 +38,10 @@ header {
 	position: relative;
 }
 
+.slide-container {
+	margin-left: -1em; // correct for first slide margin
+}
+
 .slide {
 	height: 162px; // img height + 2 lines of text
 	width: 120px;

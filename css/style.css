@@ -32,6 +32,9 @@ header {
   overflow: hidden;
   position: relative; }
 
+.slide-container {
+  margin-left: -1em; }
+
 .slide {
   height: 162px;
   width: 120px;
