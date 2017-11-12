@@ -62,3 +62,6 @@ header {
   .carousel-btn.right {
     right: 0;
     transform: translate(0, -50%); }
+
+.hide-btn {
+  display: none; }
