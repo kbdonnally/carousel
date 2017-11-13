@@ -51,21 +51,33 @@
 		numSlidesVisible,
 		alignTest;
 
-
-	// pan slides on touch
-	sliderManager.on('panmove', function(e) {
-		lastDelta = slideTrack.getAttribute("data-translateX");
-		percentage = 100 * e.deltaX / (slide.width * slideList.length);
-		moveBy = percentage + parseFloat(lastDelta);
-		slideTrack.style.transform = `translateX(${moveBy}%)`;
-		sliderManager.on('panend', function(e) {
-			slideTrack.setAttribute('data-translateX', moveBy);
-		});
-	});
-
 	// set max translation
 	var maxTranslateX = -100 + (((gallery.elem.offsetWidth - (2 * gallery.padding)) / slideTrack.offsetWidth) * 100);
 	console.log(maxTranslateX);
+
+	// pan slides on touch
+	sliderManager.on('panright panleft panend pancancel', function(e) {
+		lastDelta = slideTrack.getAttribute("data-translateX");
+		if (e.type === 'panleft') {
+			btnLeft.classList.remove('hide-btn');
+		}
+		percentage = 100 * e.deltaX / (slide.width * slideList.length);
+		moveBy = percentage + parseFloat(lastDelta);
+		slideTrack.style.transform = `translateX(${moveBy}%)`;
+
+		sliderManager.on('panend', function(e) {
+			slideTrack.setAttribute('data-translateX', moveBy);
+			if (parseFloat(moveBy) >= 0) {
+				btnLeft.classList.add('hide-btn');
+				slideTrack.style.transform = `translateX(0)`;
+				slideTrack.setAttribute('data-translateX', 0);
+			} else if (parseFloat(moveBy) <= maxTranslateX) {
+				btnRight.classList.add('hide-btn');
+				slideTrack.style.transform = `translateX(${maxTranslateX}%)`;
+				slideTrack.setAttribute('data-translateX', maxTranslateX);
+			}
+		});
+	});
 
 	// hide nav if active slide on load is 1st/last in collection
 	if (slideTrack.getAttribute("data-translateX") >= 0) {
@@ -93,6 +105,7 @@
 		console.log(maxTranslateX - lastDelta);
 		console.log(maxTranslateX - moveBy);
 		console.log(moveBy.toFixed(1));
+		// how to move content
 		if (Math.abs((maxTranslateX - lastDelta)) < slide.percentOfTotal && (maxTranslateX - lastDelta) < 0) {
 			slideTrack.style.transform = `translateX(${maxTranslateX}%)`;
 			slideTrack.setAttribute('data-translateX', maxTranslateX);
@@ -107,7 +120,7 @@
 			slideTrack.style.transform = `translateX(${moveBy}%)`;
 			slideTrack.setAttribute('data-translateX', moveBy);
 		}
-
+		// show/hide buttons
 		if (slideTrack.getAttribute("data-translateX") < 0) {
 			btnLeft.classList.remove("hide-btn");
 		} else if (slideTrack.getAttribute("data-translateX") >= 0) {
@@ -119,7 +132,5 @@
 		} else if (slideTrack.getAttribute("data-translateX") > maxTranslateX) {
 			btnRight.classList.remove("hide-btn");
 		}
-
 	}
-
 })();
