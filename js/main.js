@@ -57,9 +57,13 @@
 
 	// pan slides on touch
 	sliderManager.on('panright panleft panend pancancel', function(e) {
+		console.log(e.type);
 		lastDelta = slideTrack.getAttribute("data-translateX");
 		if (e.type === 'panleft') {
 			btnLeft.classList.remove('hide-btn');
+		}
+		if (e.type === 'panright') {
+			btnRight.classList.remove('hide-btn');
 		}
 		percentage = 100 * e.deltaX / (slide.width * slideList.length);
 		moveBy = percentage + parseFloat(lastDelta);
